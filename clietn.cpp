@@ -9,19 +9,19 @@
 #include <stdlib.h>
 #include <time.h>
 
-//clientºİ Åã¥Ü³¡¤À
+//clientç«¯ é¡¯ç¤ºéƒ¨åˆ†
 int main(void)
 {
 	WSAData wsaData;
-	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData); // ¦¨¥\¦^¶Ç 0
+	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData); // æˆåŠŸå›å‚³ 0
 	SOCKET  server;
 	struct sockaddr_in  IP_serv;
 	server = socket(AF_INET, SOCK_STREAM, 0);//IPV4 , TCP 
-	IP_serv.sin_family = AF_INET;//±µ¦¬IPV4
-	IP_serv.sin_addr.s_addr = inet_addr("127.0.0.1");//IP¦ì§}
-	IP_serv.sin_port = htons(8080);//port¸¹½X
-	connect(server, (LPSOCKADDR)&IP_serv, sizeof(IP_serv));//³s½u
-	//¤U´Ñ³¡¤À
+	IP_serv.sin_family = AF_INET;//æ¥æ”¶IPV4
+	IP_serv.sin_addr.s_addr = inet_addr("127.0.0.1");//IPä½å€
+	IP_serv.sin_port = htons(8080);//portè™Ÿç¢¼
+	connect(server, (LPSOCKADDR)&IP_serv, sizeof(IP_serv));//é€£ç·š
+	//ä¸‹æ£‹éƒ¨åˆ†
 	//send(server, "123", 4, 0);
 
 
@@ -36,34 +36,34 @@ int main(void)
 	int c;
 
 	do {
-		//ªì©l¤Æ¹CÀ¸
-		printf("¤«¦r´Ñ¹CÀ¸ªì©l¤Æ...\n");
+		//åˆå§‹åŒ–éŠæˆ²
+		printf("äº•å­—æ£‹éŠæˆ²åˆå§‹åŒ–...\n");
 		char game[3][3] = { {'1','2','3'},{'4','5','6'},{'7','8','9'} };
 		win = false;
 
-		//¿é¤Jª±®a1,2©m¦W
-		printf("(¤£­n¨Ï¥ÎªÅ®æ,¦^¨®Áäµ²§ô)\n");
-		printf("½Ğ¿é¤Jª±®a1©m¦W:\n");
+		//è¼¸å…¥ç©å®¶1,2å§“å
+		printf("(ä¸è¦ä½¿ç”¨ç©ºæ ¼,å›è»ŠéµçµæŸ)\n");
+		printf("è«‹è¼¸å…¥ç©å®¶1å§“å:\n");
 		scanf("%s", player1);
 		//send(server, player1, sizeof(player1), 0);
-		printf("½Ğ¿é¤Jª±®a2©m¦W:\n");
+		printf("è«‹è¼¸å…¥ç©å®¶2å§“å:\n");
 		scanf("%s", player2);
 		send(server, player2, sizeof(player2), 0);
 
-		//ÀH¾÷¿ï¾Ü¥ı¸¨¤lª±®a
+		//éš¨æ©Ÿé¸æ“‡å…ˆè½å­ç©å®¶
 		srand((unsigned)time(NULL));
 		choose_player = rand() % 2 + 1;
 		if (choose_player == 1) {
 			take_turns = true;
-			printf("%s(ª±®a1)­º¥ı¸¨¤l(1~9).\n", player1);
+			printf("%s(ç©å®¶1)é¦–å…ˆè½å­(1~9).\n", player1);
 		}
 		else {
 			take_turns = false;
-			printf("%s(ª±®a2)­º¥ı¸¨¤l(1~9).\n", player2);
+			printf("%s(ç©å®¶2)é¦–å…ˆè½å­(1~9).\n", player2);
 		}
 		while (!win)
 		{
-			//¿é¥X3x3¹CÀ¸®æ
+			//è¼¸å‡º3x3éŠæˆ²æ ¼
 			printf("\n");
 			printf(" %c | %c | %c \n", game[0][0], game[0][1], game[0][2]);
 			printf("---+---+---\n");
@@ -73,38 +73,63 @@ int main(void)
 			printf("\n");
 
 
-			//ª±®a1,ª±®a2¤À§O¤U´Ñ
-			//¸¨¤l¬O§_¦³®Ä
+			//ç©å®¶1,ç©å®¶2åˆ†åˆ¥ä¸‹æ£‹
+			//è½å­æ˜¯å¦æœ‰æ•ˆ
 			do {
-				printf("%s¸¨¤l:", take_turns ? player1 : player2);
-				//³o¸Ì»İ­n²M·¡½w½Ä°Ï(why?)
+				printf("%sè½å­:", take_turns ? player1 : player2);
+				//é€™è£¡éœ€è¦æ¸…æ¥šç·©è¡å€(why?)
 				if (feof(stdin) || ferror(stdin)) {
 					break;
 				}
 				while ((c = getchar()) != '\n' && c != EOF);
 				scanf("%c",&number);
-				send(server, &number, sizeof(number), 0);//????????????¦p¦ósend¥¿½Tªºchar¦r¤¸µ¹server
+				send(server, &number, sizeof(number), 0);//????????????å¦‚ä½•sendæ­£ç¢ºçš„charå­—å…ƒçµ¦server
 
-				//why:ASCII½X¿ö¹ïÀ³ªº¼Æ¦r®t48~
+				//why:ASCIIç¢¼éŒ¶å°æ‡‰çš„æ•¸å­—å·®48~
 				row = ((int)number - 48 - 1) / 3;
 				col = ((int)number - 48 - 1) % 3;
 				//printf("%d.%d.%c.\n",row,col,game[row][col]);
 				//printf("%c\n",number);
 			} while (game[row][col] != number);
 
-			//§ó·s´Ñ½L
+			//æ›´æ–°æ£‹ç›¤
+
 			if (take_turns) {
 				game[row][col] = 'X';
 			}
 			else {
 				game[row][col] = 'O';
 			}
-			if (take_turns) {
-				take_turns = false;
+
+			if ((game[0][0] == game[0][1] && game[0][1] == game[0][2]) ||
+				(game[1][0] == game[1][1] && game[1][1] == game[1][2]) ||
+				(game[2][0] == game[2][1] && game[2][1] == game[2][2]) ||
+				(game[0][0] == game[1][0] && game[1][0] == game[2][0]) ||
+				(game[0][1] == game[1][1] && game[1][1] == game[2][1]) ||
+				(game[0][2] == game[1][2] && game[1][2] == game[2][2]) ||
+				(game[0][0] == game[1][1] && game[1][1] == game[2][2]) ||
+				(game[0][2] == game[1][1] && game[1][1] == game[2][0])
+				) {
+				win = true;
+				printf("%så‹åˆ©!éŠæˆ²çµæŸ.", take_turns ? player1 : player2);
+
+				printf("\n");
+				printf(" %c | %c | %c \n", game[0][0], game[0][1], game[0][2]);
+				printf("---+---+---\n");
+				printf(" %c | %c | %c \n", game[1][0], game[1][1], game[1][2]);
+				printf("---+---+---\n");
+				printf(" %c | %c | %c \n", game[2][0], game[2][1], game[2][2]);
+				printf("\n");
 			}
 			else {
-				take_turns = true;
-			};
+
+				if (take_turns) {
+					take_turns = false;
+				}
+				else {
+					take_turns = true;
+				};
+			}
 			/*char win_socket[5];
 			recv(server, win_socket, sizeof(win_socket), 0);	
 			if (win_socket[0] == '1')
@@ -112,6 +137,12 @@ int main(void)
 			else
 				win = false;*/
 		}
+		if (feof(stdin) || ferror(stdin)) {
+			break;
+		}
+		while ((c = getchar()) != '\n' && c != EOF);
+		printf("æ˜¯å¦é–‹å§‹æ–°éŠæˆ²?(y/n)");
+		scanf("%c", &another_game);
 		
 	}
 while (toupper(another_game) == 'Y');
