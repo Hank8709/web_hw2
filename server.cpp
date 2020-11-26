@@ -2,29 +2,29 @@
 #include <winsock2.h>
 #include<stdio.h>
 
-//serverºİ §PÂ_¿éÄ¹
+//serverç«¯ åˆ¤æ–·è¼¸è´
 int main(void)
 {
 	WSAData wsaData;
-	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData); // ¦¨¥\¦^¶Ç 0
+	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData); // æˆåŠŸå›å‚³ 0
 	SOCKET client[2], server;
 	struct sockaddr_in IP_cli, IP_serv;
 	server = socket(AF_INET, SOCK_STREAM, 0);//IPV4 , TCP 
-	IP_serv.sin_family = AF_INET;//±µ¦¬IPV4
-	IP_serv.sin_addr.s_addr = 0;//IP¦ì§}
-	IP_serv.sin_port = htons(8080);//port¸¹½X
-	bind(server, (LPSOCKADDR)&IP_serv, sizeof(IP_serv));//server,¤W­zµ²ºc³]©w¦nbind¦b¤@°_,³]©w¤j¤p
-	listen(server, 5);//¼Æ¦r¥u¬O¤@­ÓºÊÅ¥ª¬ºA
+	IP_serv.sin_family = AF_INET;//æ¥æ”¶IPV4
+	IP_serv.sin_addr.s_addr = 0;//IPä½å€
+	IP_serv.sin_port = htons(8080);//portè™Ÿç¢¼
+	bind(server, (LPSOCKADDR)&IP_serv, sizeof(IP_serv));//server,ä¸Šè¿°çµæ§‹è¨­å®šå¥½bindåœ¨ä¸€èµ·,è¨­å®šå¤§å°
+	listen(server, 5);//æ•¸å­—åªæ˜¯ä¸€å€‹ç›£è½ç‹€æ…‹
 	int len_of_client = sizeof(IP_cli);
 
 	char  player[10][1024];
 
 	int people = 0;
-	//¥Îmultithread¥h±±¨î¦³´X­Óª±®a³s½u¶i¨Ó¶}´Ñ§½
-	while (people<1)//¬İ¦³´X­Óª±®a³s½u¶i¨Ó,¤W­­2­Ó
+	//ç”¨multithreadå»æ§åˆ¶æœ‰å¹¾å€‹ç©å®¶é€£ç·šé€²ä¾†é–‹æ£‹å±€
+	while (people<5)//çœ‹æœ‰å¹¾å€‹ç©å®¶é€£ç·šé€²ä¾†,ä¸Šé™2å€‹
 	{
 		
-		client[people] = accept(server, (LPSOCKADDR)&IP_cli, &len_of_client);//ºÊÅ¥¨ìªº®É­Ô³s±µªñ¨Ó
+		client[people] = accept(server, (LPSOCKADDR)&IP_cli, &len_of_client);//ç›£è½åˆ°çš„æ™‚å€™é€£æ¥è¿‘ä¾†
 		recv(client[people],player[people],sizeof(player[people]),0);
 		printf("cleint_id %d %s\n", people,player[people]);
 		people++;
@@ -35,18 +35,18 @@ int main(void)
 	bool win = false;
 	char game[3][3] = { {'1','2','3'},{'4','5','6'},{'7','8','9'} };
 	int row = 0, col = 0;
-	while (!win)//§PÂ_¹CÀ¸¿éÄ¹,³æ¤@´Ñ§½
+	while (!win)//åˆ¤æ–·éŠæˆ²è¼¸è´,å–®ä¸€æ£‹å±€
 	{
 		if(round%2==0)
 		{ 
-			recv(client[0], position, sizeof(position), 0);//ª±®a1¤U³o¨B´Ñ
+			recv(client[0], position, sizeof(position), 0);//ç©å®¶1ä¸‹é€™æ­¥æ£‹
 			row = ((int)position[1] - 48 - 1) / 3;
 			col = ((int)position[1] - 48 - 1) % 3;
 			//round++;
 		}
 		else
 		{
-			recv(client[1], position, sizeof(position), 0);//ª±®a2¤U³o¨B´Ñ
+			recv(client[1], position, sizeof(position), 0);//ç©å®¶2ä¸‹é€™æ­¥æ£‹
 			row = ((int)position[1] - 48 - 1) / 3;
 			col = ((int)position[1] - 48 - 1) % 3;
 			round++;
@@ -82,9 +82,9 @@ int main(void)
 		
 	}
 	
-	//client³s¶i¨Ó¤F
+	//clienté€£é€²ä¾†äº†
 
-	//¹CÀ¸
+	//éŠæˆ²
 
 	closesocket(server);
 
